@@ -1,0 +1,15 @@
+{
+  "bots": [
+    {
+      "name": "discord-tools",
+      "path": "Discord-Tools",
+      "script": "bot.py"
+    },
+    {
+      "name": "email-drafter",
+      "path": "Email-Drafter",
+      "script": "main.py",
+      "python": "Email-Drafter/.venv/bin/python"
+    }
+  ]
+}
