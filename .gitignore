@@ -1,0 +1,27 @@
+# Secrets
+.env
+token.json
+credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor / tool config
+.claude/settings.local.json
+.idea/
+.vscode/
+*.swp
+*.swo

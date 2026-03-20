@@ -91,6 +91,7 @@ Both bots have `.env.example` files as templates.
 
 ## Key Design Decisions
 
+- **Siloed agents** — Each subfolder is a fully independent agent. They share no code, configuration, secrets, environment variables, or state. Each bot has its own `.env`, `requirements.txt`, optional virtualenv, `config.py`, and in-process state. They can be developed, deployed, and restarted independently.
 - **Discord-Tools** requires a running instance of the "Tool Calling Mini" inference server at the configured URL (default: `https://inference.stuart-labs.com`). The bot won't function without it.
 - **Email-Drafter** requires Gmail IMAP to be enabled and an App Password (not the regular account password) because of Google's security requirements.
 - State is in-memory only — restarting either bot clears conversation history (Discord-Tools) or the seen-email dedup set (Email-Drafter).

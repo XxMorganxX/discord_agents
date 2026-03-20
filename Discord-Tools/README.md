@@ -40,6 +40,7 @@ A Discord bot that forwards chat messages to the [Tool Calling Mini](https://git
 - **`!chat <message>`** or **`!ask <message>`** — Send a message to the assistant (e.g. `!chat What's the weather tomorrow?`)
 - **`!<message>`** — Shorthand: `!Turn on the lights` sends "Turn on the lights" to the assistant
 - **`!clear`** — Clear conversation history for the current channel
+- **`!tools`** — List available tools on the inference server
 
 The bot maintains separate conversation history per channel. The inference server executes tools (weather, Spotify, Kasa lights, calendar, etc.) and returns the results.
 
@@ -65,3 +66,4 @@ Edit `config.py` or use environment variables:
 | Timeout | `INFERENCE["timeout"]` | — |
 | Command prefix | `DISCORD["command_prefix"]` | — |
 | Max history | `CONVERSATION["max_history_messages"]` | — |
+| OpenAI API key | — | `OPENAI_API_KEY` (optional; used for error summarization) |

@@ -110,6 +110,13 @@ def load_config() -> BotConfig:
         repeat_penalty=float(gen.get("repeat_penalty", 1.0)),
     )
 
+    es = ERROR_SUMMARIZER
+    error_summarizer = ErrorSummarizerConfig(
+        model=str(es.get("model", "gpt-5-nano")),
+        max_completion_tokens=int(es.get("max_completion_tokens", 30)),
+        prompt=str(es.get("prompt", "")),
+    )
+
     return BotConfig(
         discord_token=os.environ.get("DISCORD_TOKEN", ""),
         command_prefix=str(DISCORD.get("command_prefix", "!")),
@@ -120,4 +127,6 @@ def load_config() -> BotConfig:
         enable_thinking=bool(MODEL.get("enable_thinking", True)),
         generation=generation,
         max_history_messages=int(CONVERSATION.get("max_history_messages", 10)),
+        openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
+        error_summarizer=error_summarizer,
     )

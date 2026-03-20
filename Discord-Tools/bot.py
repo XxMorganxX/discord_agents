@@ -13,6 +13,7 @@ from discord.ext import commands
 
 from config import load_config
 from src.conversation import ConversationManager
+from src.error_summarizer import summarize_error
 from src.inference_client import APIError, InferenceClient
 
 logging.basicConfig(
@@ -143,6 +144,10 @@ def main() -> None:
             return True
         return channel_id in config.channel_ids
 
+    def _do_summarize(error: str) -> str:
+        es = config.error_summarizer
+        return summarize_error(error, config.openai_api_key, es.model, es.max_completion_tokens, es.prompt)
+
     async def send_to_inference(message: discord.Message, user_message: str) -> None:
         manager = conversations[message.channel.id]
         placeholder = await message.reply("_Thinking..._")
@@ -158,15 +163,26 @@ def main() -> None:
                     u.completion_tokens,
                     u.tokens_per_second,
                 )
+            # Summarize any failed tool results
+            if response.tool_results:
+                failed = [(tr.tool_name, tr.error) for tr in response.tool_results if not tr.success and tr.error]
+                if failed:
+                    summaries = await asyncio.gather(*[
+                        asyncio.to_thread(_do_summarize, err) for _, err in failed
+                    ])
+                    for (name, _), summary in zip(failed, summaries):
+                        for tr in response.tool_results:
+                            if tr.tool_name == name:
+                                tr.error = summary
             formatted = format_response(response)
             await placeholder.edit(content=formatted)
         except APIError as e:
             detail = str(e.detail).strip()
             if detail.startswith("<"):
                 detail = "inference server is unreachable (Cloudflare/tunnel error)"
-            elif len(detail) > 300:
-                detail = detail[:300] + "..."
-            await placeholder.edit(content=f"API error ({e.status_code}): {detail}")
+            else:
+                detail = await asyncio.to_thread(_do_summarize, f"HTTP {e.status_code}: {detail}")
+            await placeholder.edit(content=f"Error: {detail}")
         except Exception as e:
             logger.exception("Error processing message")
             await placeholder.edit(content=f"Error: {e}")
