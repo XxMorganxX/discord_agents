@@ -14,9 +14,11 @@ SCHEDULE = {
     "lookback_minutes": 10,
 }
 
+# Sender whitelist: comma-separated addresses in EMAIL_WHITELIST (.env).
 WHITELIST = [
-    "loganpros@gmail.com",
-    "morgannstuart@gmail.com",
+    addr.strip()
+    for addr in os.getenv("EMAIL_WHITELIST", "sender@example.com").split(",")
+    if addr.strip()
 ]
 
 # When True, show all matching emails on each check, even if already posted.

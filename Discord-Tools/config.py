@@ -22,7 +22,8 @@ DISCORD = {
 }
 
 INFERENCE = {
-    "url": "https://inference.stuart-labs.com",
+    # Base URL of your Tool Calling Mini inference server (INFERENCE_URL in .env).
+    "url": os.environ.get("INFERENCE_URL", "http://localhost:8000"),
     "timeout": 120,
 }
 
@@ -78,7 +79,7 @@ class BotConfig:
     discord_token: str = ""
     command_prefix: str = "!"
     channel_ids: list[int] = field(default_factory=list)
-    inference_url: str = "https://inference.stuart-labs.com"
+    inference_url: str = "http://localhost:8000"
     inference_timeout: int = 120
     refresh_token: str = ""
     enable_thinking: bool = True
@@ -121,7 +122,7 @@ def load_config() -> BotConfig:
         discord_token=os.environ.get("DISCORD_TOKEN", ""),
         command_prefix=str(DISCORD.get("command_prefix", "!")),
         channel_ids=channel_ids,
-        inference_url=str(INFERENCE.get("url", "https://inference.stuart-labs.com")).rstrip("/"),
+        inference_url=str(INFERENCE.get("url", "http://localhost:8000")).rstrip("/"),
         inference_timeout=int(INFERENCE.get("timeout", 120)),
         refresh_token=os.environ.get("INFERENCE_REFRESH_TOKEN", ""),
         enable_thinking=bool(MODEL.get("enable_thinking", True)),

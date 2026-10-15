@@ -2,7 +2,7 @@
 
 ## Provider
 
-Remote inference server at `https://inference.stuart-labs.com` (Cloudflare Tunnel → local llama-server running a quantized Qwen3-8B GGUF).
+Inference server at `INFERENCE_URL` (e.g. a Cloudflare Tunnel → local llama-server running a quantized Qwen3-8B GGUF).
 
 ## Interface
 
